@@ -287,6 +287,8 @@
                         <th scope="col" class="font-weight-bold"> ID# </th>
                         <th scope="col" class="font-weight-bold"> Name</th>
                         <th scope="col" class="font-weight-bold"> Contact Number </th>
+                        <th scope="col" class="font-weight-bold"> Bank Account </th>
+                        <th scope="col" class="font-weight-bold"> G-Cash </th>
                         <th scope="col" class="font-weight-bold"> Referral </th>
                         <th scope="col" class="font-weight-bold"> Income </th>
                     </thead>
@@ -297,6 +299,8 @@
                             <td scope="row"> {{ $member->id }} </td>
                             <td> {{ $member->full_name }} </td>
                             <td> {{ $member->contact_number }} </td>
+                            <td> {{ $member->bank_account }} </td>
+                            <td> {{ $member->gcash }} </td>
                             <td> {{ $member->referred_by }} </td>
                             <td> {{ $member->income }} </td>
                             @endif

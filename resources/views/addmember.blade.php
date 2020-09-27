@@ -44,6 +44,24 @@
             <p>View Referral Code</p>
         </a>
     </li>
+    <li>
+        <a href="/use-refcode/head">
+            <i class="now-ui-icons business_badge"></i>
+            <p>Add Head</p>
+        </a>
+    </li>
+    <li class="active ">
+        <a href="/use-refcode/member">
+            <i class="now-ui-icons business_badge"></i>
+            <p>Add Member</p>
+        </a>
+    </li>
+    <li>
+        <a href="/cashout-list">
+            <i class="now-ui-icons design_bullet-list-67"></i>
+            <p>Cashout List</p>
+        </a>
+    </li>
     @else
     <li>
         <a href="/client-dashboard">
@@ -63,9 +81,6 @@
             <p>Universal Binary</p>
         </a>
     </li>
-    @endif
-
-
     <li>
         <a href="/use-refcode/account">
             <i class="now-ui-icons business_badge"></i>
@@ -78,6 +93,7 @@
             <p>Add Member</p>
         </a>
     </li>
+    @endif
 @endsection
 
 @section('content')
@@ -141,6 +157,8 @@
                                     <label class="font-weight-bold">Full Name: </label><input type="text" name="full_name" class="form-control">
                                     <label class="font-weight-bold">Email: </label><input type="email" name="email" class="form-control">
                                     <label class="font-weight-bold">Contact Number: </label><input type="text" name="contact_number" class="form-control">
+                                    <label class="font-weight-bold">Bank Account: </label><input type="text" name="bank_account" class="form-control">
+                                    <label class="font-weight-bold">G-Cash: </label><input type="text" name="gcash" class="form-control">
                                     <label class="font-weight-bold">Referred by: </label><input type="email" name="referred_by" class="form-control">
                                     <label class="font-weight-bold">Upline to: </label><input type="number" name="upline_to" class="form-control">
                                     <label for="inputState">Node:</label>

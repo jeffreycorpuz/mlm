@@ -18,6 +18,8 @@ class MemberTableSeeder extends Seeder
             'password' => '123123123',
             'account_type' => 'main',
             'contact_number' => '09428581126',
+            'bank_account' => 'none',
+            'gcash' => 'none',
             'serial_number' => 'ADMINAAA-0001',
             'referred_by' => '',
             'income' => 0,

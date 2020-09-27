@@ -106,7 +106,11 @@
                   </p>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+                  @if( session('data')['role'] == 'admin' )
+                  <!-- hide profile tab -->
+                  @else
                   <a class="dropdown-item" href="/profile">Profile</a>
+                  @endif
                   <a class="dropdown-item" href="/change-password">Change Password</a>
                   <a class="dropdown-item" href="/logout">Logout</a>
                 </div>

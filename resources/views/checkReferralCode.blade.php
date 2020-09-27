@@ -65,6 +65,12 @@
                     <p>Add Member</p>
                 </a>
             </li>
+            <li>
+                <a href="/cashout-list">
+                    <i class="now-ui-icons design_bullet-list-67"></i>
+                    <p>Cashout List</p>
+                </a>
+            </li>
         @else
             <li>
                 <a href="/use-refcode/head">
@@ -76,6 +82,12 @@
                 <a href="/use-refcode/member">
                     <i class="now-ui-icons business_badge"></i>
                     <p>Add Member</p>
+                </a>
+            </li>
+            <li>
+                <a href="/cashout-list">
+                    <i class="now-ui-icons design_bullet-list-67"></i>
+                    <p>Cashout List</p>
                 </a>
             </li>
         @endif

@@ -73,6 +73,9 @@ Route::get('/use-refcode', function(){
 Route::get('/check-refcode/{member}', 'SerialNumberController@checkCode');
 Route::get('/view-refcode', 'SerialNumberController@showCode');
 
+//Cashoutlist
+Route::get('/cashout-list', 'MemberController@cashout');
+
 //For test only
 Route::get('/test', 'MemberController@test');
 

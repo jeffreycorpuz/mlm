@@ -80,6 +80,12 @@
             <p>Add Member</p>
         </a>
     </li>
+    <li>
+        <a href="/cashout-list">
+            <i class="now-ui-icons design_bullet-list-67"></i>
+            <p>Cashout List</p>
+        </a>
+    </li>
 
 @endsection
 
@@ -133,6 +139,8 @@
                                     <label class="font-weight-bold">Full Name: </label><input type="text" name="full_name" class="form-control">
                                     <label class="font-weight-bold">Email: </label><input type="email" name="email" class="form-control">
                                     <label class="font-weight-bold">Contact Number: </label><input type="text" name="contact_number" class="form-control">
+                                    <label class="font-weight-bold">Bank Account: </label><input type="text" name="bank_account" class="form-control">
+                                    <label class="font-weight-bold">G-Cash: </label><input type="text" name="gcash" class="form-control">
                                 </div>
 
                                 <button type="submit" id="add-button" class="btn btn-block">Add</button>

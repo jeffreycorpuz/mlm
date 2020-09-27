@@ -56,6 +56,12 @@
             <p>Add Member</p>
         </a>
     </li>
+    <li>
+        <a href="/cashout-list">
+            <i class="now-ui-icons design_bullet-list-67"></i>
+            <p>Cashout List</p>
+        </a>
+    </li>
 
 @endsection
 

@@ -20,6 +20,8 @@ class CreateMembersTable extends Migration
             $table->string('password');
             $table->string('account_type');
             $table->string('contact_number');
+            $table->string('bank_account')->nullable();
+            $table->string('gcash')->nullable();
             $table->string('serial_number');
             $table->string('referred_by');
             $table->bigInteger('income');

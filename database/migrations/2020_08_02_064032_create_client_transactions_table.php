@@ -16,6 +16,8 @@ class CreateClientTransactionsTable extends Migration
         Schema::create('client_transactions', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('email');
+            $table->string('bank_account');
+            $table->string('gcash');
             $table->string('transaction_type');
             $table->bigInteger('amount');
             $table->timestamps();

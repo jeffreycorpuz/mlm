@@ -763,6 +763,8 @@ class MemberController extends Controller
             if(session('data')['email'] == $request->get('email') && session('data')['password'] == $request->get('password')){
                 $transaction = new ClientTransaction([
                     'email' => $request->get('email'),
+                    'bank_account' => session('data')['bank_account'],
+                    'gcash' => session('data')['gcash'],
                     'transaction_type' => 'withdraw',
                     'amount' => intval($request->get('amount')),
                 ]);
@@ -862,6 +864,8 @@ class MemberController extends Controller
                         'password' => '123123123',
                         'account_type' => 'main',
                         'contact_number' => $request->get('contact_number'),
+                        'bank_account' => $request->get('back_account'),
+                        'gcash' => $request->get('gcash'),
                         'serial_number' => $request->get('input_code'),
                         'referred_by' => $request->get('referred_by'),
                         'income' => 0,
@@ -890,6 +894,8 @@ class MemberController extends Controller
                         'password' => '123123123',
                         'account_type' => 'main',
                         'contact_number' => $request->get('contact_number'),
+                        'bank_account' => $request->get('back_account'),
+                        'gcash' => $request->get('gcash'),
                         'serial_number' => $request->get('input_code'),
                         'referred_by' => $request->get('referred_by'),
                         'income' => 0,
@@ -975,6 +981,8 @@ class MemberController extends Controller
                 $transaction = new ClientTransaction([
                     'email' => $parent_node[0]->email,
                     'transaction_type' => 'income',
+                    'bank_account' => $parent_node[0]->bank_account,
+                    'gcash' => $parent_node[0]->gcash,
                     'amount' => $amount,
                 ]);
         
@@ -999,6 +1007,8 @@ class MemberController extends Controller
                     'password' => '123123123',
                     'account_type' => 'main',
                     'contact_number' => $request->get('contact_number'),
+                    'bank_account' => $request->get('bank_account'),
+                    'gcash' => $request->get('gcash'),
                     'serial_number' => $request->get('input_code'),
                     'referred_by' => $request->get('referred_by'),
                     'income' => 0,
@@ -1029,6 +1039,8 @@ class MemberController extends Controller
                     'password' => '123123123',
                     'account_type' => 'main',
                     'contact_number' => $request->get('contact_number'),
+                    'bank_account' => $request->get('back_account'),
+                    'gcash' => $request->get('gcash'),
                     'serial_number' => $request->get('input_code'),
                     'referred_by' => $request->get('referred_by'),
                     'income' => 0,
@@ -1166,6 +1178,8 @@ class MemberController extends Controller
 
                 $transaction = new ClientTransaction([
                     'email' => $parent_node[0]->email,
+                    'bank_account' => $parent_node[0]->bank_account,
+                    'gcash' => $parent_node[0]->gcash,
                     'transaction_type' => 'income',
                     'amount' => $amount,
                 ]);
@@ -1219,7 +1233,7 @@ class MemberController extends Controller
         $this->validate($request, [
             'full_name' => "required",
             'email' => "required",
-            'contact_number' => "required"
+            'contact_number' => "required",
         ]);
             
         //Checking if Serial number is valid
@@ -1249,7 +1263,10 @@ class MemberController extends Controller
             'full_name' => $request->get('full_name'),
             'email' => $request->get('email'),
             'password' => '123123123',
+            'account_type' => 'member',
             'contact_number' => $request->get('contact_number'),
+            'bank_account' => $request->get('back_account'),
+            'gcash' => $request->get('gcash'),
             'serial_number' => $request->get('input_code'),
             'referred_by' => '',
             'income' => 0,
@@ -1810,6 +1827,10 @@ class MemberController extends Controller
             return redirect('login');
         }
 
+        if(session('data')['role'] == 'admin'){
+            return redirect('/');
+        }
+
         $member = Member::findOrFail(session('data')['id']);
 
         return view('profile',compact('member'));
@@ -1922,6 +1943,12 @@ class MemberController extends Controller
 
         
 
+    }
+
+    public function cashout(Request $request){
+        $cashout_list = ClientTransaction::where('transaction_type','withdraw')->get();
+        
+        return view('cashout',compact('cashout_list',));
     }
 
     public function test(Request $request){
