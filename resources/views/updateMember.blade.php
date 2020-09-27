@@ -6,6 +6,10 @@
 
 @section('css_design')
     <style>
+        .form-group input[type=file] {
+            opacity: 100 !important;
+            position: relative !important;
+        }
         @media (max-width: 575.98px) {
             h1 {
                 font-size: 2rem;
@@ -120,11 +124,12 @@
 
                             <div class="card-body">
 
-                            <form method="post" action="{{url('member/update')}}">
+                            <form method="post" action="{{url('member/update')}}" enctype="multipart/form-data">
                                 {{csrf_field()}}
                                 @method('PUT')
                                 <div class="form-group">
-                                    <label class="font-weight-bold">Full Name: </label><input type="text" name="full_name" class="form-control" value="{{ $member->full_name}}">
+                                    <label class="font-weight-bold">Profile Picture: </label><br /><input type="file" name="image">
+                                    <br /><br />
                                     <label class="font-weight-bold">Contact Number: </label><input type="text" name="contact_number" class="form-control" value="{{ $member->contact_number}}">
                                 </div>
 

@@ -806,6 +806,7 @@ class MemberController extends Controller
     }
 
     public function store(Request $request){
+
         $this->validate($request, [
             'full_name' => "required",
             'email' => "required",
@@ -864,7 +865,10 @@ class MemberController extends Controller
                         'password' => '123123123',
                         'account_type' => 'main',
                         'contact_number' => $request->get('contact_number'),
-                        'bank_account' => $request->get('back_account'),
+                        'bank' => $request->get('bank'),
+                        'bank_account_name' => $request->get('bank_account_name'),
+                        'bank_account_number' => $request->get('bank_account_number'),
+                        'bank_account_type' => $request->get('bank_account_type'),
                         'gcash' => $request->get('gcash'),
                         'serial_number' => $request->get('input_code'),
                         'referred_by' => $request->get('referred_by'),
@@ -894,7 +898,10 @@ class MemberController extends Controller
                         'password' => '123123123',
                         'account_type' => 'main',
                         'contact_number' => $request->get('contact_number'),
-                        'bank_account' => $request->get('back_account'),
+                        'bank' => $request->get('bank'),
+                        'bank_account_name' => $request->get('bank_account_name'),
+                        'bank_account_number' => $request->get('bank_account_number'),
+                        'bank_account_type' => $request->get('bank_account_type'),
                         'gcash' => $request->get('gcash'),
                         'serial_number' => $request->get('input_code'),
                         'referred_by' => $request->get('referred_by'),
@@ -981,7 +988,10 @@ class MemberController extends Controller
                 $transaction = new ClientTransaction([
                     'email' => $parent_node[0]->email,
                     'transaction_type' => 'income',
-                    'bank_account' => $parent_node[0]->bank_account,
+                    'bank' => $parent_node[0]->bank,
+                    'bank_account_name' => $parent_node[0]->bank_account_name,
+                    'bank_account_number' => $parent_node[0]->bank_account_number,
+                    'bank_account_type' => $parent_node[0]->bank_account_type,
                     'gcash' => $parent_node[0]->gcash,
                     'amount' => $amount,
                 ]);
@@ -1007,7 +1017,10 @@ class MemberController extends Controller
                     'password' => '123123123',
                     'account_type' => 'main',
                     'contact_number' => $request->get('contact_number'),
-                    'bank_account' => $request->get('bank_account'),
+                    'bank' => $request->get('bank'),
+                    'bank_account_name' => $request->get('bank_account_name'),
+                    'bank_account_number' => $request->get('bank_account_number'),
+                    'bank_account_type' => $request->get('bank_account_type'),
                     'gcash' => $request->get('gcash'),
                     'serial_number' => $request->get('input_code'),
                     'referred_by' => $request->get('referred_by'),
@@ -1039,7 +1052,10 @@ class MemberController extends Controller
                     'password' => '123123123',
                     'account_type' => 'main',
                     'contact_number' => $request->get('contact_number'),
-                    'bank_account' => $request->get('back_account'),
+                    'bank' => $request->get('bank'),
+                    'bank_account_name' => $request->get('bank_account_name'),
+                    'bank_account_number' => $request->get('bank_account_number'),
+                    'bank_account_type' => $request->get('bank_account_type'),
                     'gcash' => $request->get('gcash'),
                     'serial_number' => $request->get('input_code'),
                     'referred_by' => $request->get('referred_by'),
@@ -1178,9 +1194,12 @@ class MemberController extends Controller
 
                 $transaction = new ClientTransaction([
                     'email' => $parent_node[0]->email,
-                    'bank_account' => $parent_node[0]->bank_account,
-                    'gcash' => $parent_node[0]->gcash,
                     'transaction_type' => 'income',
+                    'bank' => $parent_node[0]->bank,
+                    'bank_account_name' => $parent_node[0]->bank_account_name,
+                    'bank_account_number' => $parent_node[0]->bank_account_number,
+                    'bank_account_type' => $parent_node[0]->bank_account_type,
+                    'gcash' => $parent_node[0]->gcash,
                     'amount' => $amount,
                 ]);
         
@@ -1487,6 +1506,10 @@ class MemberController extends Controller
                         'password' => 'notapplicable',
                         'account_type' => 'sub',
                         'contact_number' => session('data')['contact_number'],
+                        'bank' => session('data')['bank'],
+                        'bank_account_name' => session('data')['bank_account_name'],
+                        'bank_account_number' => session('data')['bank_account_number'],
+                        'bank_account_type' => session('data')['bank_account_type'],
                         'serial_number' => $request->get('input_code'),
                         'referred_by' => '',
                         'income' => 0,
@@ -1514,7 +1537,11 @@ class MemberController extends Controller
                         'email' => $request->get('email'),
                         'password' => '123123123',
                         'account_type' => 'main',
-                        'contact_number' => $request->get('contact_number'),
+                        'contact_number' => session('data')['contact_number'],
+                        'bank' => session('data')['bank'],
+                        'bank_account_name' => session('data')['bank_account_name'],
+                        'bank_account_number' => session('data')['bank_account_number'],
+                        'bank_account_type' => session('data')['bank_account_type'],
                         'serial_number' => $request->get('input_code'),
                         'referred_by' => $request->get('referred_by'),
                         'income' => 0,
@@ -1599,6 +1626,11 @@ class MemberController extends Controller
                 $transaction = new ClientTransaction([
                     'email' => $parent_node[0]->email,
                     'transaction_type' => 'income',
+                    'bank' => $parent_node[0]->bank,
+                    'bank_account_name' => $parent_node[0]->bank_account_name,
+                    'bank_account_number' => $parent_node[0]->bank_account_number,
+                    'bank_account_type' => $parent_node[0]->bank_account_type,
+                    'gcash' => $parent_node[0]->gcash,
                     'amount' => $amount,
                 ]);
         
@@ -1623,6 +1655,10 @@ class MemberController extends Controller
                     'password' => 'notapplicable',
                     'account_type' => 'sub',
                     'contact_number' => session('data')['contact_number'],
+                    'bank' => session('data')['bank'],
+                    'bank_account_name' => session('data')['bank_account_name'],
+                    'bank_account_number' => session('data')['bank_account_number'],
+                    'bank_account_type' => session('data')['bank_account_type'],
                     'serial_number' => $request->get('input_code'),
                     'referred_by' => '',
                     'income' => 0,
@@ -1653,6 +1689,10 @@ class MemberController extends Controller
                     'password' => 'notapplicable',
                     'account_type' => 'sub',
                     'contact_number' => session('data')['contact_number'],
+                    'bank' => session('data')['bank'],
+                    'bank_account_name' => session('data')['bank_account_name'],
+                    'bank_account_number' => session('data')['bank_account_number'],
+                    'bank_account_type' => session('data')['bank_account_type'],
                     'serial_number' => $request->get('input_code'),
                     'referred_by' => '',
                     'income' => 0,
@@ -1796,6 +1836,11 @@ class MemberController extends Controller
                 $transaction = new ClientTransaction([
                     'email' => $parent_node[0]->email,
                     'transaction_type' => 'income',
+                    'bank' => $parent_node[0]->bank,
+                    'bank_account_name' => $parent_node[0]->bank_account_name,
+                    'bank_account_number' => $parent_node[0]->bank_account_number,
+                    'bank_account_type' => $parent_node[0]->bank_account_type,
+                    'gcash' => $parent_node[0]->gcash,
                     'amount' => $amount,
                 ]);
         
@@ -1849,13 +1894,22 @@ class MemberController extends Controller
 
     public function update(Request $request){
         $this->validate($request, [
-            'full_name' => "required",
             'contact_number' => "required"
         ]);
-
+        
         $account = Member::findOrFail(session('data')['id']);
 
-        $account->full_name = $request->get('full_name');
+        if ($request->hasFile('image')){
+            $filename = $request->image->getClientOriginalName();
+            $request->image->storeAs('images', $filename, 'public');
+
+            $account->image_file = $filename;
+            $account->contact_number = $request->get('contact_number');
+            $account->save();
+
+            return redirect()->route('profile')->with('success','Profile changed successfully');
+        }
+
         $account->contact_number = $request->get('contact_number');
         $account->save();
         
@@ -1949,6 +2003,12 @@ class MemberController extends Controller
         $cashout_list = ClientTransaction::where('transaction_type','withdraw')->get();
         
         return view('cashout',compact('cashout_list',));
+    }
+     
+    public function transactionClientRecord(){
+        $client_transaction = ClientTransaction::where('email',session('data')['email'])->get();
+
+        return view('transactionClientRecord',compact('client_transaction',));
     }
 
     public function test(Request $request){

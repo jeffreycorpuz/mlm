@@ -157,7 +157,10 @@
                                     <label class="font-weight-bold">Full Name: </label><input type="text" name="full_name" class="form-control">
                                     <label class="font-weight-bold">Email: </label><input type="email" name="email" class="form-control">
                                     <label class="font-weight-bold">Contact Number: </label><input type="text" name="contact_number" class="form-control">
-                                    <label class="font-weight-bold">Bank Account: </label><input type="text" name="bank_account" class="form-control">
+                                    <label class="font-weight-bold">Bank: </label><input type="text" name="bank" class="form-control">
+                                    <label class="font-weight-bold">Bank Account Name: </label><input type="text" name="bank_account_name" class="form-control">
+                                    <label class="font-weight-bold">Bank Account No. : </label><input type="text" name="bank_account_number" class="form-control">
+                                    <label class="font-weight-bold">Bank Account Type: </label><input type="text" name="bank_account_type" class="form-control">
                                     <label class="font-weight-bold">G-Cash: </label><input type="text" name="gcash" class="form-control">
                                     <label class="font-weight-bold">Referred by: </label><input type="email" name="referred_by" class="form-control">
                                     <label class="font-weight-bold">Upline to: </label><input type="number" name="upline_to" class="form-control">

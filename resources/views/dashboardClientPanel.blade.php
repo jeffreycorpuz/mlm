@@ -106,6 +106,12 @@
             <p>Add Member</p>
         </a>
     </li>
+    <li>
+        <a href="/transaction-record">
+            <i class="now-ui-icons design_bullet-list-67"></i>
+            <p>Transaction Record</p>
+        </a>
+    </li>
 @endsection
 
 @section('content')

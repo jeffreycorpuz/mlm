@@ -75,6 +75,8 @@ Route::get('/view-refcode', 'SerialNumberController@showCode');
 
 //Cashoutlist
 Route::get('/cashout-list', 'MemberController@cashout');
+Route::get('/transaction-record', 'MemberController@transactionClientRecord');
+
 
 //For test only
 Route::get('/test', 'MemberController@test');

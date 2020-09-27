@@ -35,6 +35,12 @@
             <p>Add Member</p>
         </a>
     </li>
+    <li>
+        <a href="/transaction-record">
+            <i class="now-ui-icons business_badge"></i>
+            <p>Transaction Record</p>
+        </a>
+    </li>
 @endsection
 
 @section('chart_script')
@@ -287,7 +293,10 @@
                         <th scope="col" class="font-weight-bold"> ID# </th>
                         <th scope="col" class="font-weight-bold"> Name</th>
                         <th scope="col" class="font-weight-bold"> Contact Number </th>
-                        <th scope="col" class="font-weight-bold"> Bank Account </th>
+                        <th scope="col" class="font-weight-bold"> Bank </th>
+                        <th scope="col" class="font-weight-bold"> Bank Account Name</th>
+                        <th scope="col" class="font-weight-bold"> Bank Account Number</th>
+                        <th scope="col" class="font-weight-bold"> Bank Account Type</th>
                         <th scope="col" class="font-weight-bold"> G-Cash </th>
                         <th scope="col" class="font-weight-bold"> Referral </th>
                         <th scope="col" class="font-weight-bold"> Income </th>
@@ -299,7 +308,10 @@
                             <td scope="row"> {{ $member->id }} </td>
                             <td> {{ $member->full_name }} </td>
                             <td> {{ $member->contact_number }} </td>
-                            <td> {{ $member->bank_account }} </td>
+                            <td> {{ $member->bank }} </td>
+                            <td> {{ $member->bank_account_name }} </td>
+                            <td> {{ $member->bank_account_number }} </td>
+                            <td> {{ $member->bank_account_type }} </td>
                             <td> {{ $member->gcash }} </td>
                             <td> {{ $member->referred_by }} </td>
                             <td> {{ $member->income }} </td>

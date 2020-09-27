@@ -20,7 +20,10 @@ class CreateMembersTable extends Migration
             $table->string('password');
             $table->string('account_type');
             $table->string('contact_number');
-            $table->string('bank_account')->nullable();
+            $table->string('bank')->nullable();
+            $table->string('bank_account_name')->nullable();
+            $table->string('bank_account_number')->nullable();
+            $table->string('bank_account_type')->nullable();
             $table->string('gcash')->nullable();
             $table->string('serial_number');
             $table->string('referred_by');
@@ -29,6 +32,7 @@ class CreateMembersTable extends Migration
             $table->string('parent_node');
             $table->string('left_node');
             $table->string('right_node');
+            $table->string('image_file')->nullable();
             
             $table->timestamps();
         });

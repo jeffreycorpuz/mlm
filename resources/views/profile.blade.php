@@ -134,7 +134,13 @@
                 </div>
                 <div class="row user-detail">
                     <div class="col-lg-12 col-sm-12 col-12">
+
+                        @if($member->image_file != '')
+                        <img src="\storage/images/{{$member->image_file}}" class="rounded-circle img-thumbnail">
+                        @else
                         <img src="{{ asset('images/blank-profile-picture.webp') }}" class="rounded-circle img-thumbnail">
+                        @endif
+                        
                         <h1>{{ $member->full_name}}</h1>
 
                         <p>
@@ -153,6 +159,22 @@
                         <p>
                             <h5 class="font-weight-bold">Serial Number:</h5>
                             <span class="profile-text">{{ $member->serial_number}}</span><br />
+                        </p>
+                        <p>
+                            <h5 class="font-weight-bold">Bank:</h5>
+                            <span class="profile-text">{{ $member->bank}}</span><br />
+                        </p>
+                        <p>
+                            <h5 class="font-weight-bold">Bank Account Name:</h5>
+                            <span class="profile-text">{{ $member->bank_account_name}}</span><br />
+                        </p>
+                        <p>
+                            <h5 class="font-weight-bold">Bank Account Number:</h5>
+                            <span class="profile-text">{{ $member->bank_account_number}}</span><br />
+                        </p>
+                        <p>
+                            <h5 class="font-weight-bold">Bank Account Type:</h5>
+                            <span class="profile-text">{{ $member->bank_account_type}}</span><br />
                         </p>
                         <hr>
                         <a href="/update-profile" class="btn btn-primary btn-sm pt-3 pb-3">Update Profile</a>
