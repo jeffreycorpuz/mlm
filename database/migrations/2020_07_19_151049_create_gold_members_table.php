@@ -15,7 +15,8 @@ class CreateGoldMembersTable extends Migration
     {
         Schema::create('gold_members', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('full_name');
+            $table->string('first_name');
+            $table->string('last_name');
             $table->string('email');
             $table->string('contact_number');
             $table->string('serial_number');

@@ -8,7 +8,7 @@
 
     <li class="active ">
         <a href="/client-dashboard">
-            <i class="now-ui-icons design_app"></i>
+            <i class="now-ui-icons business_chart-bar-32"></i>
             <p>Dashboard</p>
         </a>
     </li>
@@ -25,9 +25,9 @@
         </a>
     </li>
     <li>
-        <a href="/use-refcode/head">
+        <a href="/use-refcode/account">
             <i class="now-ui-icons business_badge"></i>
-            <p>Add Head</p>
+            <p>Add Account</p>
         </a>
     </li>
     <li>
@@ -36,7 +36,17 @@
             <p>Add Member</p>
         </a>
     </li>
+    <li>
+        <a href="/transaction-record">
+            <i class="now-ui-icons design_bullet-list-67"></i>
+            <p>Transaction Record</p>
+        </a>
+    </li>
 
+@endsection
+
+@section('profile_name')
+    <?php echo $member->first_name?>
 @endsection
 
 @section('content')

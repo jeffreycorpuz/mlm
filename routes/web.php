@@ -18,8 +18,7 @@ use Illuminate\Http\Request;
 Route::get('/client-manual', 'MemberController@manualClientPanel');
 Route::get('/client-universal', 'MemberController@universalClientPanel');
 Route::get('/client-dashboard', 'MemberController@dashboardClientPanel');
-Route::get('/client-withdraw', 'MemberController@withdrawForm')->name('withdrawform');
-Route::post('/client-withdraw/transaction', 'MemberController@withdrawTransaction');
+
 Route::get('/admin-manual', 'MemberController@manualAdminPanel');
 Route::get('/admin-universal', 'MemberController@universalAdminPanel');
 Route::get('/member/add', 'MemberController@addmember')->name('addmember');
@@ -74,6 +73,8 @@ Route::get('/check-refcode/{member}', 'SerialNumberController@checkCode');
 Route::get('/view-refcode', 'SerialNumberController@showCode');
 
 //Cashoutlist
+Route::get('/client-withdraw', 'MemberController@withdrawForm')->name('withdrawform');
+Route::post('/client-withdraw/transaction', 'MemberController@withdrawTransaction');
 Route::get('/cashout-list', 'MemberController@cashout');
 Route::get('/transaction-record', 'MemberController@transactionClientRecord');
 

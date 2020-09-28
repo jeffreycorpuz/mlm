@@ -19,32 +19,6 @@
 @endsection
 
 @section('nav')
-    @if( session('data')['role'] == 'admin' )
-    <li>
-        <a href="/admin-manual?batch=1">
-            <i class="now-ui-icons design_vector"></i>
-            <p>Manual Binary</p>
-        </a>
-    </li>
-    <li>
-        <a href="/admin-universal">
-            <i class="now-ui-icons design_vector"></i>
-            <p>Universal Binary</p>
-        </a>
-    </li>
-    <li>
-        <a href="/add-refcode">
-            <i class="now-ui-icons ui-1_email-85"></i>
-            <p>Add Referral Code</p>
-        </a>
-    </li>
-    <li>
-        <a href="/view-refcode?sort=0&page=1">
-            <i class="now-ui-icons design_bullet-list-67"></i>
-            <p>View Referral Code</p>
-        </a>
-    </li>
-    @else
     <li>
         <a href="/client-dashboard">
             <i class="now-ui-icons design_app"></i>
@@ -63,9 +37,6 @@
             <p>Universal Binary</p>
         </a>
     </li>
-    @endif
-
-
     <li class="active ">
         <a href="/use-refcode/account">
             <i class="now-ui-icons business_badge"></i>
@@ -78,6 +49,16 @@
             <p>Add Member</p>
         </a>
     </li>
+    <li>
+        <a href="/transaction-record">
+            <i class="now-ui-icons business_badge"></i>
+            <p>Transaction Record</p>
+        </a>
+    </li>
+@endsection
+
+@section('profile_name')
+    <?php echo $member->first_name?>
 @endsection
 
 @section('content')

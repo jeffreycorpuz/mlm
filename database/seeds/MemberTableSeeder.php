@@ -13,7 +13,8 @@ class MemberTableSeeder extends Seeder
     public function run()
     {
         Member::create([
-            'full_name' => 'Charlie Perry',
+            'first_name' => 'Charlie',
+            'last_name' => 'Perry',
             'email' => 'test1@mail.com',
             'password' => '123123123',
             'account_type' => 'main',

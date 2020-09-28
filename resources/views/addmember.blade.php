@@ -47,7 +47,7 @@
     <li>
         <a href="/use-refcode/head">
             <i class="now-ui-icons business_badge"></i>
-            <p>Add Head</p>
+            <p>Add New Tree</p>
         </a>
     </li>
     <li class="active ">
@@ -93,7 +93,17 @@
             <p>Add Member</p>
         </a>
     </li>
+    <li>
+        <a href="/transaction-record">
+            <i class="now-ui-icons design_bullet-list-67"></i>
+            <p>Transaction Record</p>
+        </a>
+    </li>
     @endif
+@endsection
+
+@section('profile_name')
+    <?php echo $member->first_name?>
 @endsection
 
 @section('content')
@@ -154,7 +164,8 @@
                                 {{csrf_field()}}
                                 <div class="form-group">
                                     <label class="font-weight-bold">Input Code: </label><input type="text" name="input_code" class="form-control" value="{{ $input_code }}" readonly>
-                                    <label class="font-weight-bold">Full Name: </label><input type="text" name="full_name" class="form-control">
+                                    <label class="font-weight-bold">First Name: </label><input type="text" name="first_name" class="form-control">
+                                    <label class="font-weight-bold">Last Name: </label><input type="text" name="last_name" class="form-control">
                                     <label class="font-weight-bold">Email: </label><input type="email" name="email" class="form-control">
                                     <label class="font-weight-bold">Contact Number: </label><input type="text" name="contact_number" class="form-control">
                                     <label class="font-weight-bold">Bank: </label><input type="text" name="bank" class="form-control">

@@ -1,3 +1,4 @@
+
 @extends('layouts.master')
 
 @section('title')
@@ -43,12 +44,15 @@
     </li>
 @endsection
 
+@section('profile_name')
+    <?php echo $member->first_name?>
+@endsection
+
 @section('chart_script')
     <!-- Google Chart -->
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script> 
     <script>
         let members = <?php echo json_encode($members); ?>;
-        let goback = <?php echo $goback ?>;
 
         google.charts.load('current', {packages:["orgchart"]});
         google.charts.setOnLoadCallback(drawChart);
@@ -60,26 +64,14 @@
 
             let arrNodeChart = [];
         
-            if (goback == 0){
-                arrNodeChart.push(
-                    [
-                        {
-                            'v' : "1",
-                            'f' : '<h3>' + members[0].id + '</h3>'
-                        },''    
-                    ]
-                )
-            } else {
-                arrNodeChart.push(
-                    [
-                        {
-                            'v' : "1",
-                            'f' : "<h3> <a href='/client-manual?child="+ goback +"' class='nodelink'>" + members[0].id + "</a></h3>"
-                        },''    
-                    ]
-                )
-            }
-            
+            arrNodeChart.push(
+                [
+                    {
+                        'v' : "1",
+                        'f' : '<h3>' + members[0].id + '</h3>'
+                    },''    
+                ]
+            )
 
             if(members[1]['id'] != 0){
                 arrNodeChart.push(
@@ -214,6 +206,7 @@
 @endsection
 
 @section('css_design')
+
     <style>
         table{
             border-collapse: separate !important;
@@ -251,6 +244,21 @@
             background-color: #DDEFF6;
             font-family: arial,helvetica;
         }
+        
+        .form-control{
+            width: 200px;
+        }
+
+        #search-input{
+
+        }
+
+        #search-button{
+            border-top: 1px solid black;
+            border-right: 1px solid black;
+            border-bottom: 1px solid black;
+            margin: 0;
+        }
 
         @media (max-width: 575.98px) {
             #chart_div::-webkit-scrollbar{
@@ -282,6 +290,14 @@
             </div>
         </div>
         <div class="col-md-12">
+            <div class="input-group mb-3">
+                <input type="text" class="md-form" id="search-input" placeholder="ID Number" aria-label="Recipient's username" aria-describedby="basic-addon2" onkeyup="searchOnChange()">
+                <div class="input-group-append">
+                    <a class="btn btn-info text-white" type="button" id="search-button">Search</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
                     <span class="card-title h4"> Member's Table</span>
@@ -306,7 +322,7 @@
                         <tr>
                             @if($member['id'] != 0)
                             <td scope="row"> {{ $member->id }} </td>
-                            <td> {{ $member->full_name }} </td>
+                            <td> {{ $member->first_name.' '.$member->last_name }} </td>
                             <td> {{ $member->contact_number }} </td>
                             <td> {{ $member->bank }} </td>
                             <td> {{ $member->bank_account_name }} </td>
@@ -329,5 +345,11 @@
 @endsection
 
 @section('scripts')
-
+    <script type="text/javascript">
+        function searchOnChange() {
+            let child = document.getElementById("search-input").value;
+            let link = document.getElementById("search-button");
+            link.setAttribute("href", "/client-manual?child=" + child);
+        }
+    </script>
 @endsection

@@ -41,56 +41,28 @@
 
 @section('nav')
 
-    @if( session('data')['role'] == 'admin' )
-    <li>
-        <a href="/admin-manual?page=1&batch=1">
-            <i class="now-ui-icons design_vector"></i>
-            <p>Manual Binary</p>
-        </a>
-    </li>
-    <li>
-        <a href="/admin-universal?page=1">
-            <i class="now-ui-icons design_vector"></i>
-            <p>Universal Binary</p>
-        </a>
-    </li>
-    <li>
-        <a href="/add-refcode">
-            <i class="now-ui-icons ui-1_email-85"></i>
-            <p>Add Referral Code</p>
-        </a>
-    </li>
-    <li>
-        <a href="/view-refcode?sort=0&page=1">
-            <i class="now-ui-icons design_bullet-list-67"></i>
-            <p>View Referral Code</p>
-        </a>
-    </li>
-    @else
     <li>
         <a href="/client-dashboard">
-            <i class="now-ui-icons design_app"></i>
+            <i class="now-ui-icons business_chart-bar-32"></i>
             <p>Dashboard</p>
         </a>
     </li>
     <li>
         <a href="/client-manual">
-            <i class="now-ui-icons design_bullet-list-67"></i>
+            <i class="now-ui-icons design_vector"></i>
             <p>Manual Binary</p>
         </a>
     </li>
     <li>
         <a href="/client-universal">
-            <i class="now-ui-icons design_bullet-list-67"></i>
+            <i class="now-ui-icons design_vector"></i>
             <p>Universal Binary</p>
         </a>
     </li>
-    @endif
-
     <li>
-        <a href="/use-refcode/head">
+        <a href="/use-refcode/account">
             <i class="now-ui-icons business_badge"></i>
-            <p>Add Head</p>
+            <p>Add Account</p>
         </a>
     </li>
     <li>
@@ -99,7 +71,17 @@
             <p>Add Member</p>
         </a>
     </li>
+    <li>
+        <a href="/transaction-record">
+            <i class="now-ui-icons design_bullet-list-67"></i>
+            <p>Transaction Record</p>
+        </a>
+    </li>
 
+@endsection
+
+@section('profile_name')
+    <?php echo $member->first_name?>
 @endsection
 
 @section('content')
@@ -136,7 +118,7 @@
                     <div class="col-lg-12 col-sm-12 col-12">
 
                         @if($member->image_file != '')
-                        <img src="\storage/images/{{$member->image_file}}" class="rounded-circle img-thumbnail">
+                        <img src="storage/images/{{$member->image_file}}" class="rounded-circle img-thumbnail">
                         @else
                         <img src="{{ asset('images/blank-profile-picture.webp') }}" class="rounded-circle img-thumbnail">
                         @endif
@@ -147,7 +129,10 @@
                             <h5 class="font-weight-bold">ID:</h5>
                             <span class="profile-text">{{ $member->id}}</span><br />
                         </p>
-                        
+                        <p>
+                            <h5 class="font-weight-bold">Name:</h5>
+                            <span class="profile-text">{{ $member->first_name.' '.$member->last_name}}</span><br />
+                        </p>
                         <p>
                             <h5 class="font-weight-bold">Email:</h5>
                             <span class="profile-text">{{ $member->email}}</span><br />
@@ -177,7 +162,7 @@
                             <span class="profile-text">{{ $member->bank_account_type}}</span><br />
                         </p>
                         <hr>
-                        <a href="/update-profile" class="btn btn-primary btn-sm pt-3 pb-3">Update Profile</a>
+                        <a href="/update-profile" class="btn btn-info btn-sm pt-3 pb-3">Update Profile</a>
 
                     </div>
                 </div>

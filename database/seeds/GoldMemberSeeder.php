@@ -13,7 +13,8 @@ class GoldMemberSeeder extends Seeder
     public function run()
     {
         GoldMember::create([
-            'full_name' => 'Charlie Perry',
+            'first_name' => 'Charlie',
+            'last_name' => 'Perry',
             'email' => 'test1@mail.com',
             'contact_number' => '09428581126',
             'serial_number' => 'ADMINAAA-0001',

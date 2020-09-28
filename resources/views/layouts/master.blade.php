@@ -37,8 +37,6 @@
   </style>
   @yield('chart_script')
   @yield('css_design')
-
-  
 </head>
 
 <body>
@@ -102,7 +100,10 @@
                 <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <i class="now-ui-icons users_single-02"></i>
                   <p>
-                    <span class="d-lg d-md-block">{{session('data')['full_name']}}</span>
+                    <span class="d-lg d-md-block"> 
+                      <!-- NAME -->
+                      @yield('profile_name')
+                    </span>
                   </p>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">

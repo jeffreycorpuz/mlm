@@ -124,6 +124,12 @@
                     <p>Add Member</p>
                 </a>
             </li>
+            <li>
+                <a href="/transaction-record">
+                    <i class="now-ui-icons business_badge"></i>
+                    <p>Transaction Record</p>
+                </a>
+            </li>
         @else
             <li>
                 <a href="/use-refcode/account">
@@ -137,6 +143,12 @@
                     <p>Add Member</p>
                 </a>
             </li>
+            <li>
+                <a href="/transaction-record">
+                    <i class="now-ui-icons business_badge"></i>
+                    <p>Transaction Record</p>
+                </a>
+            </li>
         @endif
     @endif
 
@@ -145,6 +157,10 @@
 
     
 
+@endsection
+
+@section('profile_name')
+    <?php echo $member->first_name?>
 @endsection
 
 @section('content')

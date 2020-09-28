@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\SerialNumber;
+use App\Member;
 use Illuminate\Auth\EloquentUserProvider;
 
 //pagination of collection data
@@ -55,15 +56,16 @@ class SerialNumberController extends Controller
         return redirect()->route('addcode')->with('success','Data is Successfully Added');
     }
 
-    public function useCode($member){
+    public function useCode($check_member){
         if(!session()->has('data')){
             return redirect('login');
         }
 
-        $member_type = $member;
+        $member_type = $check_member;
+        $member = Member::findOrFail(session('data')['id']);
 
         $title = "Use Referral Code";
-        return view('checkReferralCode',compact('title', 'member_type'));
+        return view('checkReferralCode',compact('member','title', 'member_type'));
     }
 
     public function checkCode(Request $request, $member){

@@ -114,6 +114,10 @@
     </li>
 @endsection
 
+@section('profile_name')
+    <?php echo $member->first_name?>
+@endsection
+
 @section('content')
     <div class="row">
         <div class="col-md-12 mt-5">

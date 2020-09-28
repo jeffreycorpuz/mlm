@@ -349,12 +349,14 @@ class MemberController extends Controller
             return redirect('/');
         }
 
+        
+
         if($request->child == ''){
             $head_member = Member::where('id', session('data')['id'])->get();
         }else if($request->child == session('data')['id']){
             return redirect('/client-manual');
         }else{
-            function checkChildNodesMC($givenNode, $childNode, $switch){
+            function checkChildNodesMC($givenNode, $childNode){
                 $arrNode = []; 
 
                 foreach($givenNode as $id){
@@ -363,38 +365,28 @@ class MemberController extends Controller
                     if ($parentNode->left_node != ''){
                         array_push($arrNode, intval($parentNode->left_node));
                         if ($childNode == $parentNode->left_node){
-                            if ($switch == 0){
-                                return 'false';
-                            } else {
-                                return 'true';
-                            }
+                            return 'true';
                         }
                     }
     
                     if ($parentNode->right_node != ''){
                         array_push($arrNode, intval($parentNode->right_node));
                         if ($childNode == $parentNode->right_node){
-                            if ($switch == 0){
-                                return 'false';
-                            } else {
-                                return 'true';
-                            }
+                            return 'true';
                         }
                     }
                 }
     
                 if (count($arrNode) != 0){
-                    if ($switch == 0){
-                        return checkChildNodesMC($arrNode, $childNode, 1);
-                    } else {
-                        return checkChildNodesMC($arrNode, $childNode, 0);
-                    }
+                    return checkChildNodesMC($arrNode, $childNode);
                 }
     
                 return 'false';
             }
     
-            $node_list = checkChildNodesMC([session('data')['id']], $request->child, 0);
+            $node_list = checkChildNodesMC([session('data')['id']], $request->child);
+
+    
 
             if ($node_list == 'true'){
                 $head_member = Member::where('id', $request->child)->get();
@@ -473,15 +465,9 @@ class MemberController extends Controller
             }
         }
 
-        if ($head_member[0]->id != session('data')['id']){
-            $parent_node = Member::findOrFail($head_member[0]->parent_node);
-            $head_node = Member::findOrFail($parent_node->parent_node);
-            $goback =  $head_node->id;
-        } else {
-            $goback = 0;
-        }
+        $member = Member::findOrFail(session('data')['id']);
 
-        return view('manualClientPanel',compact('members','goback'));
+        return view('manualClientPanel',compact('member','members'));
     }
 
     public function paginate($items, $perPage = 10, $page = null, $options = []){
@@ -500,6 +486,8 @@ class MemberController extends Controller
         if(session('data')['role'] == 'admin'){
             return redirect('/');
         }
+
+        $member = Member::findOrFail(session('data')['id']);
 
         $all_accounts = GoldMember::where('email', session('data')['email'])->get();
         $all_accounts_nodes = [];
@@ -550,6 +538,7 @@ class MemberController extends Controller
         }
 
         return view('universalClientPanel',compact(
+            'member',
             'all_accounts',
             'all_accounts_nodes'
         ));
@@ -563,6 +552,8 @@ class MemberController extends Controller
         if(session('data')['role'] == 'admin'){
             return redirect('/');
         }
+
+        $member = Member::findOrFail(session('data')['id']);
         
         function countManual($givenNode, $length){
             $arrNode = []; 
@@ -691,6 +682,7 @@ class MemberController extends Controller
         
 
         return view('dashboardClientPanel',compact(
+            'member',
             'title',
             'total_income',
             'total_member',
@@ -718,6 +710,8 @@ class MemberController extends Controller
         if(session('data')['role'] == 'admin'){
             return redirect('/');
         }
+
+        $member = Member::findOrFail(session('data')['id']);
 
         $client_transaction = ClientTransaction::where('email',session('data')['email'])
             ->where('transaction_type','withdraw')
@@ -749,7 +743,7 @@ class MemberController extends Controller
 
         $title = "Transaction Form";
 
-        return view('withdrawClientPanel',compact('title','total_balance'));
+        return view('withdrawClientPanel',compact('member','title','total_balance'));
     }
 
     public function withdrawTransaction(Request $request){
@@ -758,12 +752,17 @@ class MemberController extends Controller
             'password' => "required",
             'amount' => "required"
         ]);
+        
+        $member = Member::findOrFail(session('data')['id']);
 
         if($request->total_balance >= $request->amount){
             if(session('data')['email'] == $request->get('email') && session('data')['password'] == $request->get('password')){
                 $transaction = new ClientTransaction([
                     'email' => $request->get('email'),
-                    'bank_account' => session('data')['bank_account'],
+                    'bank' => session('data')['bank'],
+                    'bank_account_name' => session('data')['bank_account_name'],
+                    'bank_account_number' => session('data')['bank_account_number'],
+                    'bank_account_type' => session('data')['bank_account_type'],
                     'gcash' => session('data')['gcash'],
                     'transaction_type' => 'withdraw',
                     'amount' => intval($request->get('amount')),
@@ -776,7 +775,7 @@ class MemberController extends Controller
                 return redirect()->route('withdrawform')->with('error','Invalid Email or Password');
             }
         }else{
-            return redirect()->route('withdrawform')->with('error','Invalid Amount');
+            return redirect()->route('withdrawform')->with('member','error','Invalid Amount');
         }
     }
 
@@ -784,6 +783,10 @@ class MemberController extends Controller
 
         if(!session()->has('data')){
             return redirect('login');
+        }
+
+        if(session('data')['role'] != 'admin'){
+            $member = Member::findOrFail(session('data')['id']);
         }
 
         $check_code = SerialNumber::where('input_code',$request->get('code'))->get();
@@ -802,13 +805,19 @@ class MemberController extends Controller
         }
         
         $title = "Add Member";
-        return view('addmember',compact('title','input_code'));
+        if(session('data')['role'] != 'admin'){
+            return view('addmember',compact('member','title','input_code'));
+        } else {
+            return view('addmember',compact('title','input_code'));
+        }
+        
     }
 
     public function store(Request $request){
 
         $this->validate($request, [
-            'full_name' => "required",
+            'first_name' => "required",
+            'last_name' => "required",
             'email' => "required",
             'contact_number' => "required",
             'referred_by' => "required",
@@ -860,7 +869,8 @@ class MemberController extends Controller
 
                 if ($parentNode->left_node == '' ){
                     $left_node = new Member([
-                        'full_name' => $request->get('full_name'),
+                        'first_name' => $request->get('first_name'),
+                        'last_name' => $request->get('last_name'),
                         'email' => $request->get('email'),
                         'password' => '123123123',
                         'account_type' => 'main',
@@ -881,9 +891,7 @@ class MemberController extends Controller
             
                     $left_node->save();
 
-                    $left_node = Member::where('full_name',$request->get('full_name'))
-                        ->where('email',$request->get('email'))
-                        ->get();
+                    $left_node = Member::where('serial_number',$request->get('input_code'))->get();
                     
                     $parentNode->left_node = $left_node[0]->id;
                     $parentNode->save();
@@ -893,7 +901,8 @@ class MemberController extends Controller
 
                 } else if($parentNode->right_node == '' ){
                     $right_node = new Member([
-                        'full_name' => $request->get('full_name'),
+                        'first_name' => $request->get('first_name'),
+                        'last_name' => $request->get('last_name'),
                         'email' => $request->get('email'),
                         'password' => '123123123',
                         'account_type' => 'main',
@@ -914,9 +923,7 @@ class MemberController extends Controller
             
                     $right_node->save();
 
-                    $right_node = Member::where('full_name',$request->get('full_name'))
-                        ->where('email',$request->get('email'))
-                        ->get();
+                    $right_node = Member::where('serial_number',$request->get('input_code'))->get();
                     
                     $parentNode->right_node = $right_node[0]->id;
                     $parentNode->save();
@@ -1012,7 +1019,8 @@ class MemberController extends Controller
         if($request->get('node') == "right"){
             if ($parent_node[0]->right_node == ''){
                 $right_node = new Member([
-                    'full_name' => $request->get('full_name'),
+                    'first_name' => $request->get('first_name'),
+                    'last_name' => $request->get('last_name'),
                     'email' => $request->get('email'),
                     'password' => '123123123',
                     'account_type' => 'main',
@@ -1033,9 +1041,7 @@ class MemberController extends Controller
         
                 $right_node->save();
 
-                $right_node = Member::where('full_name',$request->get('full_name'))
-                    ->where('email',$request->get('email'))
-                    ->get();
+                $right_node = Member::where('serial_number',$request->get('input_code'))->get();
 
                 $parent_node[0]->right_node = $right_node[0]->id;
                 $parent_node[0]->save();
@@ -1047,7 +1053,8 @@ class MemberController extends Controller
         }else{
             if ($parent_node[0]->left_node == ''){
                 $left_node = new Member([
-                    'full_name' => $request->get('full_name'),
+                    'first_name' => $request->get('first_name'),
+                    'last_name' => $request->get('last_name'),
                     'email' => $request->get('email'),
                     'password' => '123123123',
                     'account_type' => 'main',
@@ -1068,9 +1075,7 @@ class MemberController extends Controller
         
                 $left_node->save();
 
-                $left_node = Member::where('full_name',$request->get('full_name'))
-                    ->where('email',$request->get('email'))
-                    ->get();
+                $left_node = Member::where('serial_number',$request->get('input_code'))->get();
                 
                 $parent_node[0]->left_node = $left_node[0]->id;
                 $parent_node[0]->save();
@@ -1092,7 +1097,8 @@ class MemberController extends Controller
 
                 if ($parentNode->left_node == '' ){
                     $left_node = new GoldMember([
-                        'full_name' => $request->get('full_name'),
+                        'first_name' => $request->get('first_name'),
+                        'last_name' => $request->get('last_name'),
                         'email' => $request->get('email'),
                         'contact_number' => $request->get('contact_number'),
                         'serial_number' => $request->get('input_code'),
@@ -1105,7 +1111,7 @@ class MemberController extends Controller
             
                     $left_node->save();
 
-                    $left_node = GoldMember::where('email',$request->get('email'))->get();
+                    $left_node = GoldMember::where('serial_number',$request->get('input_code'))->get();
 
                     $parentNode->left_node = $left_node[0]->id;
                     $parentNode->save();
@@ -1115,7 +1121,8 @@ class MemberController extends Controller
 
                 } else if($parentNode->right_node == '' ){
                     $right_node = new GoldMember([
-                        'full_name' => $request->get('full_name'),
+                        'first_name' => $request->get('first_name'),
+                        'last_name' => $request->get('last_name'),
                         'email' => $request->get('email'),
                         'contact_number' => $request->get('contact_number'),
                         'serial_number' => $request->get('input_code'),
@@ -1128,7 +1135,7 @@ class MemberController extends Controller
             
                     $right_node->save();
 
-                    $right_node = GoldMember::where('email',$request->get('email'))->get();
+                    $right_node = GoldMember::where('serial_number',$request->get('input_code'))->get();
 
                     $parentNode->right_node = $right_node[0]->id;
                     $parentNode->save();
@@ -1229,6 +1236,10 @@ class MemberController extends Controller
     public function addhead(Request $request){
         if(!session()->has('data')){
             return redirect('login');
+        }
+
+        if(session('data')['role'] == 'admin'){
+            return redirect('/');
         }
 
         $check_code = SerialNumber::where('input_code',$request->get('code'))->get();
@@ -1445,6 +1456,12 @@ class MemberController extends Controller
             return redirect('login');
         }
 
+        if(session('data')['role'] == 'admin'){
+            return redirect('/');
+        }
+
+        $member = Member::findOrFail(session('data')['id']);
+
         $check_code = SerialNumber::where('input_code',$request->get('code'))->get();
 
         if ( $check_code->count() == 0 ){
@@ -1460,7 +1477,7 @@ class MemberController extends Controller
         }
         
         $title = "Add account";
-        return view('addaccount',compact('title','input_code'));
+        return view('addaccount',compact('member','title','input_code'));
     }
 
     public function storeaccount(Request $request){
@@ -1491,9 +1508,9 @@ class MemberController extends Controller
         $count_account = Member::where('email',session('data')['email'])->count();
         $count_account += 1;
 
-        $account_fullname = session('data')['full_name'].' '.$count_account;
+        $account_no = $count_account;
 
-        function addAccount($givenNode, $request){
+        function addAccount($givenNode, $request, $account_no){
             $arrNode = [];
 
             foreach ($givenNode as & $id) {
@@ -1501,15 +1518,17 @@ class MemberController extends Controller
 
                 if ($parentNode->left_node == '' ){
                     $left_node = new Member([
-                        'full_name' => $account_fullname,
+                        'first_name' => session('data')['first_name'],
+                        'last_name' => session('data')['last_name'],
                         'email' => session('data')['email'],
                         'password' => 'notapplicable',
-                        'account_type' => 'sub',
+                        'account_type' => $account_no,
                         'contact_number' => session('data')['contact_number'],
                         'bank' => session('data')['bank'],
                         'bank_account_name' => session('data')['bank_account_name'],
                         'bank_account_number' => session('data')['bank_account_number'],
                         'bank_account_type' => session('data')['bank_account_type'],
+                        'gcash' => session('data')['gcash'],
                         'serial_number' => $request->get('input_code'),
                         'referred_by' => '',
                         'income' => 0,
@@ -1521,29 +1540,29 @@ class MemberController extends Controller
             
                     $left_node->save();
 
-                    Member::where('full_name',$account_fullname)
-                        ->where('email',session('data')['email'])
-                        ->get();
+                    $left_node = Member::where('serial_number',$request->get('input_code'))->get();
                     
                     $parentNode->left_node = $left_node[0]->id;
                     $parentNode->save();
-                    addIncome($parentNode->id); // for income
 
+                    addIncome($parentNode->id); // for income
                     return;
 
                 } else if($parentNode->right_node == '' ){
                     $right_node = new Member([
-                        'full_name' => $request->get('full_name'),
-                        'email' => $request->get('email'),
+                        'first_name' => session('data')['first_name'],
+                        'last_name' => session('data')['last_name'],
+                        'email' => session('data')['email'],
                         'password' => '123123123',
-                        'account_type' => 'main',
+                        'account_type' => $account_no,
                         'contact_number' => session('data')['contact_number'],
                         'bank' => session('data')['bank'],
                         'bank_account_name' => session('data')['bank_account_name'],
                         'bank_account_number' => session('data')['bank_account_number'],
                         'bank_account_type' => session('data')['bank_account_type'],
+                        'gcash' => session('data')['gcash'],
                         'serial_number' => $request->get('input_code'),
-                        'referred_by' => $request->get('referred_by'),
+                        'referred_by' => '',
                         'income' => 0,
                         'batch' => $parentNode->batch,
                         'parent_node' => $parentNode->id,
@@ -1553,14 +1572,12 @@ class MemberController extends Controller
             
                     $right_node->save();
 
-                    Member::where('full_name',$account_fullname)
-                        ->where('email',session('data')['email'])
-                        ->get();
+                    $right_node = Member::where('serial_number',$request->get('input_code'))->get();
                     
                     $parentNode->right_node = $right_node[0]->id;
                     $parentNode->save();
-                    addIncome($parentNode->id); // for income
 
+                    addIncome($parentNode->id); // for income
                     return;
                 } else {
                     array_push($arrNode, intval($parentNode->left_node),  intval($parentNode->right_node));
@@ -1568,7 +1585,7 @@ class MemberController extends Controller
             }
 
             
-            return addMember($arrNode, $request);
+            return addMember($arrNode, $request, $account_no);
         }
 
         function countNodes($givenNode, $length){
@@ -1650,15 +1667,17 @@ class MemberController extends Controller
         if($request->get('node') == "right"){
             if ($parent_node[0]->right_node == ''){
                 $right_node = new Member([
-                    'full_name' => $account_fullname,
+                    'first_name' => session('data')['first_name'],
+                    'last_name' => session('data')['last_name'],
                     'email' => session('data')['email'],
                     'password' => 'notapplicable',
-                    'account_type' => 'sub',
+                    'account_type' => $account_no,
                     'contact_number' => session('data')['contact_number'],
                     'bank' => session('data')['bank'],
                     'bank_account_name' => session('data')['bank_account_name'],
                     'bank_account_number' => session('data')['bank_account_number'],
                     'bank_account_type' => session('data')['bank_account_type'],
+                    'gcash' => session('data')['gcash'],
                     'serial_number' => $request->get('input_code'),
                     'referred_by' => '',
                     'income' => 0,
@@ -1670,29 +1689,29 @@ class MemberController extends Controller
         
                 $right_node->save();
 
-                $right_node = Member::where('full_name',$account_fullname)
-                        ->where('email',session('data')['email'])
-                        ->get();
+                $right_node = Member::where('serial_number',$request->get('input_code'))->get();
 
                 $parent_node[0]->right_node = $right_node[0]->id;
                 $parent_node[0]->save();
                 addIncome($parent_node[0]->id);
             }else{
                 $parent_node = Member::where('id',$parent_node[0]->right_node)->get();
-                addAccount([$parent_node[0]->id], $request);
+                addAccount([$parent_node[0]->id], $request, $account_no);
             }
         }else{
             if ($parent_node[0]->left_node == ''){
                 $left_node = new Member([
-                    'full_name' => $account_fullname,
+                    'first_name' => session('data')['first_name'],
+                    'last_name' => session('data')['last_name'],
                     'email' => session('data')['email'],
                     'password' => 'notapplicable',
-                    'account_type' => 'sub',
+                    'account_type' => $account_no,
                     'contact_number' => session('data')['contact_number'],
                     'bank' => session('data')['bank'],
                     'bank_account_name' => session('data')['bank_account_name'],
                     'bank_account_number' => session('data')['bank_account_number'],
                     'bank_account_type' => session('data')['bank_account_type'],
+                    'gcash' => session('data')['gcash'],
                     'serial_number' => $request->get('input_code'),
                     'referred_by' => '',
                     'income' => 0,
@@ -1704,16 +1723,14 @@ class MemberController extends Controller
         
                 $left_node->save();
 
-                $left_node = Member::where('full_name',$account_fullname)
-                    ->where('email',session('data')['email'])
-                    ->get();
+                $left_node = Member::where('serial_number',$request->get('input_code'))->get();
                 
                 $parent_node[0]->left_node = $left_node[0]->id;
                 $parent_node[0]->save();
                 addIncome($parent_node[0]->id); //add income
             }else{
                 $parent_node = Member::where('id',$parent_node[0]->left_node)->get();
-                addAccount([$parent_node[0]->id], $request);
+                addAccount([$parent_node[0]->id], $request, $account_no);
             }
         }
 
@@ -1721,7 +1738,7 @@ class MemberController extends Controller
 
         $parent_node = GoldMember::where('parent_node','head')->get();
 
-        function addGoldMember($givenNode, $request, $account_fullname){
+        function addGoldMember($givenNode, $request, $account_no){
             $arrNode = [];
 
             foreach ($givenNode as & $id) {
@@ -1729,7 +1746,8 @@ class MemberController extends Controller
 
                 if ($parentNode->left_node == '' ){
                     $left_node = new GoldMember([
-                        'full_name' => $account_fullname,
+                        'first_name' => session('data')['first_name'],
+                        'last_name' => session('data')['last_name'],
                         'email' => session('data')['email'],
                         'contact_number' => session('data')['contact_number'],
                         'serial_number' => $request->get('input_code'),
@@ -1742,9 +1760,7 @@ class MemberController extends Controller
             
                     $left_node->save();
 
-                    $left_node = GoldMember::where('full_name',$account_fullname)
-                        ->where('email',session('data')['email'])
-                        ->get();
+                    $left_node = GoldMember::where('serial_number',$request->get('input_code'))->get();
 
                     $parentNode->left_node = $left_node[0]->id;
                     $parentNode->save();
@@ -1754,7 +1770,8 @@ class MemberController extends Controller
 
                 } else if($parentNode->right_node == '' ){
                     $right_node = new GoldMember([
-                        'full_name' => $account_fullname,
+                        'first_name' => session('data')['first_name'],
+                        'last_name' => session('data')['last_name'],
                         'email' => session('data')['email'],
                         'contact_number' => session('data')['contact_number'],
                         'serial_number' => $request->get('input_code'),
@@ -1767,9 +1784,7 @@ class MemberController extends Controller
             
                     $right_node->save();
 
-                    $right_node = GoldMember::where('full_name',$account_fullname)
-                        ->where('email',session('data')['email'])
-                        ->get();
+                    $right_node = GoldMember::where('serial_number',$request->get('input_code'))->get();
 
                     $parentNode->right_node = $right_node[0]->id;
                     $parentNode->save();
@@ -1781,7 +1796,7 @@ class MemberController extends Controller
                 }
             }
 
-            return addGoldMember($arrNode, $request, $account_fullname);
+            return addGoldMember($arrNode, $request, $account_no);
         }
 
         function countGoldNodes($givenNode, $length){
@@ -1857,7 +1872,7 @@ class MemberController extends Controller
             }
         }
 
-        addGoldMember([$parent_node[0]->id], $request, $account_fullname);
+        addGoldMember([$parent_node[0]->id], $request, $account_no);
 
         //update serial number as used code
         $serial_number = SerialNumber::where('input_code',$request->get('input_code'))->get();
@@ -1885,6 +1900,10 @@ class MemberController extends Controller
         if(!session()->has('data')){
             return redirect('login');
         }
+        
+        if(session('data')['role'] == 'admin'){
+            return redirect('/');
+        }
 
         $title="Update Profile";
         $member = Member::findOrFail(session('data')['id']);
@@ -1894,26 +1913,67 @@ class MemberController extends Controller
 
     public function update(Request $request){
         $this->validate($request, [
+            'first_name' => "required",
+            'last_name' => "required",
             'contact_number' => "required"
         ]);
         
-        $account = Member::findOrFail(session('data')['id']);
+        $accounts = Member::where('email', session('data')['email'])->get();
 
-        if ($request->hasFile('image')){
-            $filename = $request->image->getClientOriginalName();
-            $request->image->storeAs('images', $filename, 'public');
+        //Manual Binary
+        foreach($accounts as $account){
+            if ($account->account_type == 'main' && $request->hasFile('image')){
+                $filename = $request->image->getClientOriginalName();
+                $request->image->storeAs('images', $filename, 'public');
 
-            $account->image_file = $filename;
-            $account->contact_number = $request->get('contact_number');
-            $account->save();
+                $account->image_file = $filename;
+                $account->first_name = $request->get('first_name');
+                $account->last_name = $request->get('last_name');
+                $account->contact_number = $request->get('contact_number');
+                $account->bank = $request->get('bank');
+                $account->bank_account_name = $request->get('bank_account_name');
+                $account->bank_account_number = $request->get('bank_account_number');
+                $account->bank_account_type = $request->get('bank_account_type');
+                $account->gcash = $request->get('gcash');
+                $account->save();
 
-            return redirect()->route('profile')->with('success','Profile changed successfully');
+            } else {
+                $account->first_name = $request->get('first_name');
+                $account->last_name = $request->get('last_name');
+                $account->contact_number = $request->get('contact_number');
+                $account->bank = $request->get('bank');
+                $account->bank_account_name = $request->get('bank_account_name');
+                $account->bank_account_number = $request->get('bank_account_number');
+                $account->bank_account_type = $request->get('bank_account_type');
+                $account->gcash = $request->get('gcash');
+                $account->save();
+            }
         }
 
-        $account->contact_number = $request->get('contact_number');
-        $account->save();
-        
-        return redirect()->route('profile')->with('success','Profile changed successfully');
+        //Universal Binary
+        $accounts = GoldMember::where('email', session('data')['email'])->get();
+
+        foreach($accounts as $account){
+            $account->first_name = $request->get('first_name');
+            $account->last_name = $request->get('last_name');
+            $account->contact_number = $request->get('contact_number');
+            $account->save();
+        }
+
+        //Client Transaction
+        $accounts = ClientTransaction::where('email', session('data')['email'])->get();
+
+        foreach($accounts as $account){
+            $account->bank = $request->get('bank');
+            $account->bank_account_name = $request->get('bank_account_name');
+            $account->bank_account_number = $request->get('bank_account_number');
+            $account->bank_account_type = $request->get('bank_account_type');
+            $account->gcash = $request->get('gcash');
+            $account->save();
+        }
+
+        return redirect()->route('profile')->with('success','Profile Information changed successfully');
+  
     }
 
     public function login(Request $request) {
@@ -1958,8 +2018,18 @@ class MemberController extends Controller
             return redirect('login');
         }
 
+        if(session('data')['role'] != 'admin'){
+            $member = Member::findOrFail(session('data')['id']);
+        }
+
         $title = "Change Password";
-        return view('changePassword',compact('title'));
+
+        if(session('data')['role'] != 'admin'){
+            return view('changePassword',compact('member','title'));
+        } else {
+            return view('changePassword',compact('title'));
+        }
+        
     }
 
     public function updatePassword(Request $request){
@@ -2000,15 +2070,32 @@ class MemberController extends Controller
     }
 
     public function cashout(Request $request){
+        if(!session()->has('data')){
+            return redirect('login');
+        }
+
+        if(session('data')['role'] != 'admin'){
+            return redirect('/');
+        }
+
         $cashout_list = ClientTransaction::where('transaction_type','withdraw')->get();
         
         return view('cashout',compact('cashout_list',));
     }
      
     public function transactionClientRecord(){
-        $client_transaction = ClientTransaction::where('email',session('data')['email'])->get();
+        if(!session()->has('data')){
+            return redirect('login');
+        }
 
-        return view('transactionClientRecord',compact('client_transaction',));
+        if(session('data')['role'] == 'admin'){
+            return redirect('/');
+        }
+
+        $client_transaction = ClientTransaction::where('email',session('data')['email'])->get();
+        $member = Member::findOrFail(session('data')['id']);
+
+        return view('transactionClientRecord',compact('member','client_transaction',));
     }
 
     public function test(Request $request){

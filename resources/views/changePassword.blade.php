@@ -4,6 +4,10 @@
     Change Password | MLM
 @endsection
 
+@section('profile_name')
+    <?php echo $member->first_name?>
+@endsection
+
 @section('css_design')
     <style>
         @media (max-width: 575.98px) {
@@ -17,13 +21,13 @@
 @section('nav')
     @if( session('data')['role'] == 'admin' )
     <li>
-        <a href="/admin-manual?page=1&batch=1">
+        <a href="/admin-manual?batch=1">
             <i class="now-ui-icons design_vector"></i>
             <p>Manual Binary</p>
         </a>
     </li>
     <li>
-        <a href="/admin-universal?page=1">
+        <a href="/admin-universal">
             <i class="now-ui-icons design_vector"></i>
             <p>Universal Binary</p>
         </a>
@@ -35,9 +39,27 @@
         </a>
     </li>
     <li>
-        <a href="/view-refcode?sort=0&page=1">
+        <a href="/view-refcode?select_by=all&sort=0&page=1">
             <i class="now-ui-icons design_bullet-list-67"></i>
             <p>View Referral Code</p>
+        </a>
+    </li>
+    <li>
+        <a href="/use-refcode/head">
+            <i class="now-ui-icons business_badge"></i>
+            <p>Add New Tree</p>
+        </a>
+    </li>
+    <li>
+        <a href="/use-refcode/member">
+            <i class="now-ui-icons business_badge"></i>
+            <p>Add Member</p>
+        </a>
+    </li>
+    <li>
+        <a href="/cashout-list">
+            <i class="now-ui-icons design_bullet-list-67"></i>
+            <p>Cashout List</p>
         </a>
     </li>
     @else
@@ -59,13 +81,10 @@
             <p>Universal Binary</p>
         </a>
     </li>
-    @endif
-
-
     <li>
-        <a href="/use-refcode/head">
+        <a href="/use-refcode/account">
             <i class="now-ui-icons business_badge"></i>
-            <p>Add Head</p>
+            <p>Add Account</p>
         </a>
     </li>
     <li>
@@ -74,6 +93,14 @@
             <p>Add Member</p>
         </a>
     </li>
+    <li>
+        <a href="/transaction-record">
+            <i class="now-ui-icons design_bullet-list-67"></i>
+            <p>Transaction Record</p>
+        </a>
+    </li>
+    @endif
+
 @endsection
 
 @section('content')
@@ -128,7 +155,7 @@
                                     <label class="font-weight-bold">Re-type new password: </label><input type="password" name="retype_new_password" class="form-control">
                                 </div>
 
-                                <button type="submit" class="btn btn-primary btn-block">Update</button>
+                                <button type="submit" class="btn btn-info btn-block">Update</button>
                             </form>
 
                             </div>

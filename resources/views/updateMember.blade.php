@@ -19,57 +19,28 @@
 @endsection
 
 @section('nav')
-    @if( session('data')['role'] == 'admin' )
-    <li>
-        <a href="/admin-manual?page=1&batch=1">
-            <i class="now-ui-icons design_vector"></i>
-            <p>Manual Binary</p>
-        </a>
-    </li>
-    <li>
-        <a href="/admin-universal?page=1">
-            <i class="now-ui-icons design_vector"></i>
-            <p>Universal Binary</p>
-        </a>
-    </li>
-    <li>
-        <a href="/add-refcode">
-            <i class="now-ui-icons ui-1_email-85"></i>
-            <p>Add Referral Code</p>
-        </a>
-    </li>
-    <li>
-        <a href="/view-refcode?sort=0&page=1">
-            <i class="now-ui-icons design_bullet-list-67"></i>
-            <p>View Referral Code</p>
-        </a>
-    </li>
-    @else
     <li>
         <a href="/client-dashboard">
-            <i class="now-ui-icons design_app"></i>
+            <i class="now-ui-icons business_chart-bar-32"></i>
             <p>Dashboard</p>
         </a>
     </li>
     <li>
         <a href="/client-manual">
-            <i class="now-ui-icons design_bullet-list-67"></i>
+            <i class="now-ui-icons design_vector"></i>
             <p>Manual Binary</p>
         </a>
     </li>
     <li>
         <a href="/client-universal">
-            <i class="now-ui-icons design_bullet-list-67"></i>
+            <i class="now-ui-icons design_vector"></i>
             <p>Universal Binary</p>
         </a>
     </li>
-    @endif
-
-
     <li>
-        <a href="/use-refcode/head">
+        <a href="/use-refcode/account">
             <i class="now-ui-icons business_badge"></i>
-            <p>Add Head</p>
+            <p>Add Account</p>
         </a>
     </li>
     <li>
@@ -78,6 +49,16 @@
             <p>Add Member</p>
         </a>
     </li>
+    <li>
+        <a href="/transaction-record">
+            <i class="now-ui-icons design_bullet-list-67"></i>
+            <p>Transaction Record</p>
+        </a>
+    </li>
+@endsection
+
+@section('profile_name')
+    <?php echo $member->first_name?>
 @endsection
 
 @section('content')
@@ -130,10 +111,17 @@
                                 <div class="form-group">
                                     <label class="font-weight-bold">Profile Picture: </label><br /><input type="file" name="image">
                                     <br /><br />
-                                    <label class="font-weight-bold">Contact Number: </label><input type="text" name="contact_number" class="form-control" value="{{ $member->contact_number}}">
+                                    <label class="font-weight-bold">First Name: </label><input type="text" name="first_name" class="form-control" value="{{ $member->first_name }}">
+                                    <label class="font-weight-bold">Last Name: </label><input type="text" name="last_name" class="form-control" value="{{ $member->last_name }}" >
+                                    <label class="font-weight-bold">Contact Number: </label><input type="text" name="contact_number" class="form-control" value="{{ $member->contact_number }}">
+                                    <label class="font-weight-bold">Bank: </label><input type="text" name="bank" class="form-control" value="{{ $member->bank }}">
+                                    <label class="font-weight-bold">Bank Account Name: </label><input type="text" name="bank_account_name" class="form-control" value="{{ $member->bank_account_name }}">
+                                    <label class="font-weight-bold">Bank Account No. : </label><input type="text" name="bank_account_number" class="form-control" value="{{ $member->bank_account_number }}">
+                                    <label class="font-weight-bold">Bank Account Type: </label><input type="text" name="bank_account_type" class="form-control" value="{{ $member->bank_account_type }}">
+                                    <label class="font-weight-bold">G-Cash: </label><input type="text" name="gcash" class="form-control" value="{{ $member->gcash }}">
                                 </div>
 
-                                <button type="submit" class="btn btn-primary btn-block">Update</button>
+                                <button type="submit" class="btn btn-info btn-block">Update</button>
                             </form>
 
                             </div>

@@ -114,6 +114,10 @@
     </li>
 @endsection
 
+@section('profile_name')
+    <?php echo $member->first_name?>
+@endsection
+
 @section('content')
     <div class="col-md-12">
         <div class="card">
@@ -126,6 +130,7 @@
                         <thead>
                             <th scope="col" class="font-weight-bold"> Transaction ID</th>
                             <th scope="col" class="font-weight-bold"> Amount</th>
+                            <th scope="col" class="font-weight-bold"> Type</th>
                             <th scope="col" class="font-weight-bold"> Date</th>
                         </thead>
                         <tbody id="table-data">
@@ -134,6 +139,7 @@
                                     <tr>
                                         <td> {{ $transaction->id }} </td>
                                         <td> {{ $transaction->amount }} </td>
+                                        <td> {{ $transaction->transaction_type }} </td>
                                         <td> <?php echo date_format($transaction->created_at,"Y/m/d"); ?> </td>
                                         
                                     </tr>

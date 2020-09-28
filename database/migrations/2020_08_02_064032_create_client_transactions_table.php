@@ -20,7 +20,7 @@ class CreateClientTransactionsTable extends Migration
             $table->string('bank_account_name')->nullable();
             $table->string('bank_account_number')->nullable();
             $table->string('bank_account_type')->nullable();
-            $table->string('gcash');
+            $table->string('gcash')->nullable();
             $table->string('transaction_type');
             $table->bigInteger('amount');
             $table->timestamps();

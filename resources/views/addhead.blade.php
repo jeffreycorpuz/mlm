@@ -22,7 +22,6 @@
 
 @section('nav')
 
-    @if( session('data')['role'] == 'admin' )
     <li>
         <a href="/admin-manual?batch=1">
             <i class="now-ui-icons design_vector"></i>
@@ -47,31 +46,10 @@
             <p>View Referral Code</p>
         </a>
     </li>
-    @else
-    <li>
-        <a href="/client-dashboard">
-            <i class="now-ui-icons design_app"></i>
-            <p>Dashboard</p>
-        </a>
-    </li>
-    <li>
-        <a href="/client-manual">
-            <i class="now-ui-icons design_bullet-list-67"></i>
-            <p>Manual Binary</p>
-        </a>
-    </li>
-    <li>
-        <a href="/client-universal">
-            <i class="now-ui-icons design_bullet-list-67"></i>
-            <p>Universal Binary</p>
-        </a>
-    </li>
-    @endif
-
     <li class="active ">
         <a href="/use-refcode/head">
             <i class="now-ui-icons business_badge"></i>
-            <p>Add Head</p>
+            <p>Add New Tree</p>
         </a>
     </li>
     <li>

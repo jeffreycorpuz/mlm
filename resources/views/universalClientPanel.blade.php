@@ -35,6 +35,16 @@
             <p>Add Member</p>
         </a>
     </li>
+    <li>
+        <a href="/transaction-record">
+            <i class="now-ui-icons business_badge"></i>
+            <p>Transaction Record</p>
+        </a>
+    </li>
+@endsection
+
+@section('profile_name')
+    <?php echo $member->first_name?>
 @endsection
 
 @section('css_design')
